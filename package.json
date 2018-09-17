@@ -1,0 +1,19 @@
+{
+  "name": "react-native-zendesk-support2",
+  "version": "1.0.0",
+  "description": "Zendesk SDK v2.0 for React-Native Wrapper",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Jlexyc/react-native-zendesk-support2"
+  },
+  "keywords": [
+    "zendesk",
+    "ios",
+    "android",
+    "react-native",
+    "react",
+  ],
+  "author": "jlexyc",
+  "license": "MIT"
+}

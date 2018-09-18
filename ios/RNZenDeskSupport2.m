@@ -10,9 +10,10 @@
 #endif
 
 #import "RNZenDeskSupport2.h"
+#import <ZendeskCoreSDK/ZendeskCoreSDK.h>
 #import <ZendeskSDK/ZendeskSDK.h>
 
-@implementation RNZenDeskSupport
+@implementation RNZenDeskSupport2
 
 RCT_EXPORT_MODULE();
 
@@ -40,7 +41,6 @@ RCT_EXPORT_METHOD(initialize:(NSDictionary *)config){
 
 RCT_EXPORT_METHOD(setupIdentity:(NSDictionary *)identity){
     dispatch_async(dispatch_get_main_queue(), ^{
-        ZDKAnonymousIdentity *zdIdentity = [ZDKAnonymousIdentity new];
         NSString *email = [RCTConvert NSString:identity[@"customerEmail"]];
         NSString *name = [RCTConvert NSString:identity[@"customerName"]];
         id<ZDKObjCIdentity> userIdentity = [[ZDKObjCAnonymous alloc] initWithName:name
@@ -68,9 +68,9 @@ RCT_EXPORT_METHOD(callSupport:(NSDictionary *)fields) {
         ZDKRequestUiConfiguration * config = [ZDKRequestUiConfiguration new];
         config.subject = subject;
         config.tags = tags;
-        config.fields = customFieldsArray
+        config.fields = customFieldArray;
 
-        [vc presentViewController:vc animated:YES completion:nil]
+        [vc presentViewController:vc animated:YES completion:nil];
     });
 }
 

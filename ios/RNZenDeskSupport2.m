@@ -57,7 +57,6 @@ RCT_EXPORT_METHOD(callSupport:(NSDictionary *)fields) {
     dispatch_async(dispatch_get_main_queue(), ^{
         UIWindow *window=[UIApplication sharedApplication].keyWindow;
         UIViewController *vc = [window rootViewController];
-
         NSMutableArray *customFieldArray = [[NSMutableArray alloc] init];
         
         for (NSString* key in customFields) {
@@ -69,8 +68,33 @@ RCT_EXPORT_METHOD(callSupport:(NSDictionary *)fields) {
         config.subject = subject;
         config.tags = tags;
         config.fields = customFieldArray;
+        UIViewController *vcToShow = [ZDKRequestUi buildRequestUiWith:@[config]];
+        vcToShow.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(dismissViewController:)];
+        
+        UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:vcToShow];
+        
+        [vc presentViewController:navController animated:YES completion:nil];
+    });
+}
 
-        [vc presentViewController:vc animated:YES completion:nil];
+RCT_EXPORT_METHOD(ticketsList) {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UIWindow *window=[UIApplication sharedApplication].keyWindow;
+        UIViewController *vc = [window rootViewController];
+        UIViewController *vcToShow = [ZDKRequestUi buildRequestList];
+        vcToShow.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(dismissViewController:)];
+        
+        UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:vcToShow];
+        
+        [vc presentViewController:navController animated:YES completion:nil];
+    });
+}
+
+- (void) dismissViewController:(id) sender {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UIWindow *window=[UIApplication sharedApplication].keyWindow;
+        UIViewController *vc = [window rootViewController];
+        [vc dismissViewControllerAnimated:true completion:nil];
     });
 }
 

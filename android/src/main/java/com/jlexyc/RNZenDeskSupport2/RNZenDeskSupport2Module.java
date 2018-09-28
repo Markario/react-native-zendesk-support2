@@ -18,18 +18,13 @@ import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.BaseActivityEventListener;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
-import com.zendesk.sdk.feedback.ui.ContactZendeskActivity;
-import com.zendesk.sdk.requests.RequestActivity;
-import com.zendesk.sdk.support.SupportActivity;
-import com.zendesk.sdk.support.ContactUsButtonVisibility;
-import com.zendesk.sdk.model.access.AnonymousIdentity;
-import com.zendesk.sdk.model.access.Identity;
-import com.zendesk.sdk.model.request.CustomField;
-import com.zendesk.sdk.network.impl.ZendeskConfig;
-import com.zendesk.sdk.network.impl.Zendesk;
-import com.zendesk.sdk.feedback.BaseZendeskFeedbackConfiguration;
-import com.zendesk.sdk.feedback.ZendeskFeedbackConfiguration;
-
+import zendesk.core.AnonymousIdentity;
+import zendesk.support.request.RequestActivity;
+import zendesk.support.request.RequestUiConfig;
+import zendesk.support.requestlist.RequestListActivity;
+import zendesk.support.requestlist.RequestListUiConfig;
+import zendesk.core.Zendesk;
+import zendesk.support.CustomField;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,28 +32,6 @@ import java.util.List;
 import java.util.Map;
 
 import java.io.Serializable;
-
-class FeedbackConfig extends BaseZendeskFeedbackConfiguration implements Serializable {
-
-    String subject = null;
-    List<String> tags = null;
-
-    public FeedbackConfig(String subject, List<String> tags){
-      super();
-      this.subject = subject;
-      this.tags = tags;
-    }
-
-    @Override
-    public String getRequestSubject() {
-      return this.subject;
-    }
-
-    @Override
-    public List<String> getTags() {
-      return this.tags;
-    }
-  }
 
 public class RNZenDeskSupport2Module extends ReactContextBaseJavaModule {
 
@@ -123,7 +96,7 @@ public class RNZenDeskSupport2Module extends ReactContextBaseJavaModule {
   @ReactMethod
   public void callSupport(final ReadableMap options) {
 
-    RequestActivity.Builder builder = RequestActivity.builder();
+    RequestUiConfig.Builder builder = RequestActivity.builder();
 
     if(options.hasKey("subject")) {
       String subject = options.getString("subject");
@@ -136,7 +109,7 @@ public class RNZenDeskSupport2Module extends ReactContextBaseJavaModule {
       for(int i = 0; i < tagsArray.size(); i++){
         tags.add(tagsArray.getString(i));
       }
-      builder.withTags(tags)
+      builder.withTags(tags);
     }
 
     if(options.hasKey("customFields")){
@@ -150,11 +123,20 @@ public class RNZenDeskSupport2Module extends ReactContextBaseJavaModule {
 
     Activity activity = getCurrentActivity();
 
-    if(activity != null){
-        Intent callSupportIntent = builder.intent(activity)
-        callSupportIntent.putExtra(ContactZendeskActivity.EXTRA_CONTACT_CONFIGURATION, configuration);
-        activity.startActivityForResult(callSupportIntent, REQUEST_CODE, null);
+    if(activity != null) {
+      builder.show(activity);
     }
   }
 
+  @ReactMethod
+  public void ticketsList() {
+
+    RequestListUiConfig.Builder builder = RequestListActivity.builder();
+    Activity activity = getCurrentActivity();
+
+    if(activity != null) {
+        builder.show(activity);
+    }
+    
+  }
 }

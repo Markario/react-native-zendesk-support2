@@ -8,8 +8,7 @@ import {
 
 const Emitter = new NativeEventEmitter(NativeModules.RNZenDeskSupport2);
 
-export default NativeModules.RNZenDeskSupport2 || {}
-export const zendeskEvents = {
+const zendeskEvents = {
 	submitRequestCompletedSet: (callback) => {
 		this.successListener = Emitter.addListener('submitRequestCompleted', (notification) => {
 			if(callback) {
@@ -20,4 +19,10 @@ export const zendeskEvents = {
 	submitRequestCompletedClean: () => {
 		this.successListener.remove();
 	},
+}
+
+
+module.exports = {
+	ZendeskSupport: NativeModules.RNZenDeskSupport2 || {},
+	zendeskEvents: zendeskEvents,
 }

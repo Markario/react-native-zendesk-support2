@@ -24,6 +24,7 @@ import zendesk.support.request.RequestUiConfig;
 import zendesk.support.requestlist.RequestListActivity;
 import zendesk.support.requestlist.RequestListUiConfig;
 import zendesk.core.Zendesk;
+import zendesk.support.Support;
 import zendesk.support.CustomField;
 
 import java.util.ArrayList;
@@ -90,6 +91,7 @@ public class RNZenDeskSupport2Module extends ReactContextBaseJavaModule {
       }
 
       Zendesk.INSTANCE.setIdentity(builder.build());
+      Support.INSTANCE.init(Zendesk.INSTANCE);
     }
 
   
